@@ -19,8 +19,8 @@ async function createUserData(req, res) {
     .then(() => res.status(201).send({message: "Utilisateur enregistré" }))
     .catch((error) => {res.status(409).send({message: "Utilisateur non enregistré :" + error})});
   }
-  //remove
-  //  User.deleteMany().then(() => console.log("Utilisateur supprimé"));
+  // //remove
+  //   User.deleteMany().then(() => console.log("Utilisateur supprimé"));
   
   //Hash password
   function hashPassword(password) {
