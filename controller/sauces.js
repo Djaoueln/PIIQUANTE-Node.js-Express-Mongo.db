@@ -92,25 +92,24 @@ function modifySauce (req, res) {
     if (err) {
       res.status(401).send({ error: "Unauthorized" });
     }
-    const {body, file} = req;
-    const sauces = JSON.parse(body.sauce);
-    const { userId, name, manufacturer, description, mainPepper, heat } = sauces;
-    const imageUrl = file.destination + file.filename;
-    delete sauces._id;
-    delete sauces.userId;
-    Product.updateOne({ _id: req.params.id }, {
-        userId,
-        name,
-        manufacturer,
-        description ,
-        mainPepper,
+     const {body, file} = req;
+     const sauces = JSON.parse(body.sauce);
+     const { userId, name, manufacturer, description, mainPepper, heat } = sauces;
+     const imageUrl = file.destination + file.filename;
+     Product.updateOne({ _id: req.params.id,}, {
+         userId,
+         name,
+         manufacturer,
+         description ,
+         mainPepper,
         imageUrl: req.protocol + "://" + req.get("host") + "/images/" + file.filename,
         heat,
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
-    }).then((product) => {
+        _id: req.params.id
+    }).then(() => {
       res.status(200).send({ message: "Objet modifié" });
     });
   });
@@ -155,13 +154,52 @@ function likeSauce (req, res) {
         product.dislikes += 1;
         product.usersDisliked.push(req.body.userId);
       }
+      if (req.body.like === 0) {
+        if (product.usersLiked.includes(req.body.userId)) {
+          product.likes -= 1;
+          product.usersLiked.splice(product.usersLiked.indexOf(req.body.userId), 1);
+        } else if (product.usersDisliked.includes(req.body.userId)) {
+          product.dislikes -= 1;
+          product.usersDisliked.splice(product.usersDisliked.indexOf(req.body.userId), 1);
+        }
+      }
       product.save().then((product) => {
-        res.status(200).send(product);
+        res.status(200).send({ message: product });
       });
     });
   });
 }
 
+
+
+               
+           
+
+
+
+
+module.exports = { getSauces, saucesCreate, sauceById, modifySauce, deleteSauce, likeSauce };
+
+
+
+//         }
+//       }
+
+//       product.save().then((product) => {
+//         res.status(200).send(product);
+//       });
+//     });
+//   });
+// }
+
+// // else if (req.body.like === 0) {
+// //   if (product.usersLiked.includes(req.body.userId)) {
+// //     product.likes -= 1;
+// //     product.usersLiked.splice(product.usersLiked.indexOf(req.body.userId), 1);
+// //   } else if (product.usersDisliked.includes(req.body.userId)) {
+// //     product.dislikes -= 1;
+// //     product.usersDisliked.splice(product.usersDisliked.indexOf(req.body.userId), 1);
+// //   }
 
 
 
