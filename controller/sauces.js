@@ -92,24 +92,28 @@ function modifySauce (req, res) {
     if (err) {
       res.status(401).send({ error: "Unauthorized" });
     }
-
-    const hasNewImage = req.file !=null;
-    const imageChange = makeImage(req, hasNewImage);
-
-    Product.findByIdAndUpdate(req.params.id, imageChange).then((product) => {
-      res.status(200).send(product);
+    const {body, file} = req;
+    const sauces = JSON.parse(body.sauce);
+    const { userId, name, manufacturer, description, mainPepper, heat } = sauces;
+    const imageUrl = file.destination + file.filename;
+    delete sauces._id;
+    delete sauces.userId;
+    Product.updateOne({ _id: req.params.id }, {
+        userId,
+        name,
+        manufacturer,
+        description ,
+        mainPepper,
+        imageUrl: req.protocol + "://" + req.get("host") + "/images/" + file.filename,
+        heat,
+        likes: 0,
+        dislikes: 0,
+        usersLiked: [],
+        usersDisliked: [],
+    }).then((product) => {
+      res.status(200).send({ message: "Objet modifié" });
     });
   });
-}
-
-function makeImage(req, hasNewImage) 
-{
-    if (hasNewImage) {
-        return req.body
-    }
-    const imageChange = JSON.parse(body.sauce);
-       imageChange.imageUrl = req.protocol + "://" + req.get("host") + "/images/" + file.filename;
-    return imageChange;
 }
 
 
@@ -124,10 +128,12 @@ function deleteSauce (req, res) {
       res.status(401).send({ error: "Unauthorized" });
     }
     Product.findByIdAndDelete(req.params.id).then((product) => {
-      res.status(200).send(product);
+      res.status(200).send({ message: 'Objet supprimé !'});
     });
   });
 }
+
+
 
 
 
@@ -148,14 +154,6 @@ function likeSauce (req, res) {
       } else if (req.body.like === -1) {
         product.dislikes += 1;
         product.usersDisliked.push(req.body.userId);
-      } else if (req.body.like === 0) {
-        if (product.usersLiked.includes(req.body.userId)) {
-          product.likes -= 1;
-          product.usersLiked.splice(product.usersLiked.indexOf(req.body.userId), 1);
-        } else if (product.usersDisliked.includes(req.body.userId)) {
-          product.dislikes -= 1;
-          product.usersDisliked.splice(product.usersDisliked.indexOf(req.body.userId), 1);
-        }
       }
       product.save().then((product) => {
         res.status(200).send(product);
