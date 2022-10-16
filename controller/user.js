@@ -5,7 +5,6 @@ const { User } = require('../mongo');
 
 
 //Create user
-
 async function createUserData(req, res) {
     const { email, password } = req.body;
     const hashedPassword = await hashPassword(password);
@@ -19,9 +18,7 @@ async function createUserData(req, res) {
     .then(() => res.status(201).send({message: "Utilisateur enregistré" }))
     .catch((error) => {res.status(409).send({message: "Utilisateur non enregistré :" + error})});
   }
-  // //remove
-  //   User.deleteMany().then(() => console.log("Utilisateur supprimé"));
-  
+
   //Hash password
   function hashPassword(password) {
     const saltRounds = 10;

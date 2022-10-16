@@ -19,7 +19,7 @@ const sauceSchema = mongoose.Schema({
 
 const Product = mongoose.model("product", sauceSchema);
 
-// affichage de toutes les sauces
+// display all sauces
 function getSauces (req, res) {
     const header = req.headers.authorization.split(" ")[1];
     if (!header) {
@@ -36,10 +36,7 @@ function getSauces (req, res) {
 
 }
 
-//remove
-// Product.deleteMany().then(() => console.log("sauce supprimé"));
-
-// creation d'une sauce
+// create a sauce
 function saucesCreate (req, res) {
   const {body, file} = req;
 const sauces = JSON.parse(body.sauce);
@@ -65,7 +62,7 @@ const product = new Product({
     });
 }
 
-// selection d'une sauce et affichage de ses informations
+// selec of a sauce
 function sauceById (req, res) {
     const header = req.headers.authorization.split(" ")[1];
     if (!header) {
@@ -82,7 +79,7 @@ function sauceById (req, res) {
 }
 
 
-// modfications des informations d'une sauce
+// modfication of information of a sauce
 function modifySauce (req, res) {
     const header = req.headers.authorization.split(" ")[1];
     if (!header) {
@@ -116,7 +113,7 @@ function modifySauce (req, res) {
 }
 
 
-// suppression d'une sauce
+// delete sauce
 function deleteSauce (req, res) {
     const header = req.headers.authorization.split(" ")[1];
     if (!header) {
@@ -131,10 +128,6 @@ function deleteSauce (req, res) {
     });
   });
 }
-
-
-
-
 
 // like/dislike d'une sauce
 function likeSauce (req, res) {
@@ -170,41 +163,4 @@ function likeSauce (req, res) {
   });
 }
 
-
-
-               
-           
-
-
-
-
 module.exports = { getSauces, saucesCreate, sauceById, modifySauce, deleteSauce, likeSauce };
-
-
-
-//         }
-//       }
-
-//       product.save().then((product) => {
-//         res.status(200).send(product);
-//       });
-//     });
-//   });
-// }
-
-// // else if (req.body.like === 0) {
-// //   if (product.usersLiked.includes(req.body.userId)) {
-// //     product.likes -= 1;
-// //     product.usersLiked.splice(product.usersLiked.indexOf(req.body.userId), 1);
-// //   } else if (product.usersDisliked.includes(req.body.userId)) {
-// //     product.dislikes -= 1;
-// //     product.usersDisliked.splice(product.usersDisliked.indexOf(req.body.userId), 1);
-// //   }
-
-
-
-
-
-
-
-module.exports = {getSauces, saucesCreate, sauceById, modifySauce, deleteSauce, likeSauce};

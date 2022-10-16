@@ -1,2 +1,0 @@
-get http://localhost:3000/api/sauces
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRqYW91ZWwubmFobGExQGdtYWlsLmNvbSIsImlhdCI6MTY2NDgwNjQ0NywiZXhwIjoxNjY0ODkyODQ3fQ.m-SRxf3NB6XUT7U5TS2DQsQc0cUL359YrykCpW8kJUM
