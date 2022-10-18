@@ -89,12 +89,12 @@ function modifySauce (req, res) {
     if (err) {
       res.status(401).send({ error: "Unauthorized" });
     }
-     const sauceObject = req.file ?
+     const sauceProduct = req.file ?
     {
       ...JSON.parse(req.body.sauce),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-    Product.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+    Product.updateOne({ _id: req.params.id }, { ...sauceProduct, _id: req.params.id })
       .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
       .catch(error => res.status(400).json({ error }));
   });

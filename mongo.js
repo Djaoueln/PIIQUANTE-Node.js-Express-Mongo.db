@@ -9,7 +9,6 @@ mongoose.connect(`mongodb+srv://${userName}:${password}@cluster0.wgzwom8.mongodb
  const userSchema = mongoose.Schema({
      email: { type: String, required: true, unique: true },
      password: { type: String, required: true }
-
  });
 
  //Plugin
