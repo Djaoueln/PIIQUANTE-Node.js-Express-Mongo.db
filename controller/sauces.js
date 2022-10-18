@@ -89,28 +89,17 @@ function modifySauce (req, res) {
     if (err) {
       res.status(401).send({ error: "Unauthorized" });
     }
-     const {body, file} = req;
-     const sauces = JSON.parse(body.sauce);
-     const { userId, name, manufacturer, description, mainPepper, heat } = sauces;
-     const imageUrl = file.destination + file.filename;
-     Product.updateOne({ _id: req.params.id,}, {
-         userId,
-         name,
-         manufacturer,
-         description ,
-         mainPepper,
-        imageUrl: req.protocol + "://" + req.get("host") + "/images/" + file.filename,
-        heat,
-        likes: 0,
-        dislikes: 0,
-        usersLiked: [],
-        usersDisliked: [],
-        _id: req.params.id
-    }).then(() => {
-      res.status(200).send({ message: "Objet modifié" });
-    });
+     const sauceObject = req.file ?
+    {
+      ...JSON.parse(req.body.sauce),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+    Product.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+      .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+      .catch(error => res.status(400).json({ error }));
   });
 }
+
 
 
 // delete sauce
